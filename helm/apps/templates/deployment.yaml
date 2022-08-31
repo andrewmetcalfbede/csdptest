@@ -4,13 +4,6 @@ kind: Deployment
 metadata:
   {{- include "dashboard-application.metadata" . | nindent 2 }}
 spec:
-  revisionHistoryLimit: 0
-  {{- if .Values.minReadySeconds }}
-  minReadySeconds: {{ .Values.minReadySeconds }}
-  {{- end }}
-  {{- if .Values.replicaCount }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "dashboard-application.selectorLabels" . | nindent 6 }}
@@ -23,10 +16,6 @@ spec:
       labels:
         {{- include "dashboard-application.selectorLabels" . | nindent 8 }}
     spec:
-      {{- if .Values.deployment.nodeSelector }}
-      nodeSelector: {{- .Values.deployment.nodeSelector | nindent 8 }}
-      {{- end }}
-      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       containers:
       - name: {{ include "dashboard-application.name" . }}
         image: {{ include "dashboard-application.image" . }}
@@ -47,25 +36,6 @@ spec:
           value: {{ .Values.db.name }}
         - name: DB_HOST
           value: {{ .Values.db.host }}
-        {{- if .Values.container.resources }}
-        resources:
-          requests:
-            {{- .Values.container.resources.requests | toYaml | nindent 12 }}
-          {{- if .Values.container.resources.limits }}  
-          limits:
-          {{- if .Values.container.resources.limits.cpu }}  
-            cpu: {{ .Values.container.resources.limits.cpu }}
-          {{ else if and (.Values.container.resources.limits.cpuLimitBoostPercent) (.Values.container.resources.requests.cpu) }}
-            cpu: {{ include "bede-application.cpuBoostLimit" . }}
-          {{- end }}
-          {{- if .Values.container.resources.limits.memory }}  
-            memory: {{ .Values.container.resources.limits.memory }}
-        {{- end }}
-        {{- end }}
-        {{- end }}
-        {{- if .Values.container.probes }}
-        {{- .Values.container.probes | toYaml | nindent 8 }}
-        {{- end }}
         ports:
         - containerPort: {{ .Values.container.port }}
       {{- if and (eq .Values.app.name "bede-devopsdashboard-api") (eq .Values.cache.enabled "true") }}
