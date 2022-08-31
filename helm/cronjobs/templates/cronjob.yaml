@@ -1,0 +1,54 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  {{- include "dashboard-cronjob.metadata" . | nindent 2 }}
+spec:
+  schedule: {{ include "dashboard-cronjob.schedule" . }}
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: "Never"
+          containers:
+          - name: {{ include "dashboard-cronjob.name" . }}
+            image: {{ include "dashboard-cronjob.image" . }}
+            env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: db.user
+                  optional: false
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: db.password
+                  optional: false
+            - name: DB_NAME
+              value: {{ .Values.db.name }}
+            - name: DB_HOST
+              value: {{ .Values.db.host }}
+            {{- if eq .Values.cronjob.name "bede-devopsdashboard-codefresh" }}
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: codefresh.api_key
+                  optional: false
+            - name: PIPELINE_NAME
+              value: {{ .Values.codefresh.pipeline_name | quote }}
+            - name: BUILD_LIMIT
+              value: {{ .Values.codefresh.build_limit | quote }}
+            {{- end }}
+            {{- if eq .Values.cronjob.name "bede-devopsdashboard-od" }}
+            - name: OD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secretName }}
+                  key: od.api_key
+                  optional: false
+            {{- end }}

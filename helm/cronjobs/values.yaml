@@ -1,0 +1,13 @@
+cronjob:
+  maintainer: some-name
+  slackChannel: some-channel
+  repository: "https://github.com/andrewmetcalfbede/csdptest"
+
+container:
+  repository: some.repo
+  pullPolicy: Always
+
+secretName: "some-secret"
+
+tolerateSpot: "true"
+spotEnabled: "true"

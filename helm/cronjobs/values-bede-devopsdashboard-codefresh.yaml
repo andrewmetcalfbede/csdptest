@@ -1,0 +1,11 @@
+cronjob:
+  name: bede-devopsdashboard-codefresh
+  version: "latest"
+  schedule: "*/5 * * * *"
+
+container:
+  imageName: bede-devopsdashboard-codefresh
+
+codefresh:
+  pipeline_name: "Terraform/TerraformChildApply"
+  build_limit: "30"

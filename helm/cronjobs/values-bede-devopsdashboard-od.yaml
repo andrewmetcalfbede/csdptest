@@ -1,0 +1,7 @@
+cronjob:
+  name: bede-devopsdashboard-od
+  version: "latest"
+  schedule: "*/30 * * * *"
+
+container:
+  imageName: bede-devopsdashboard-od
