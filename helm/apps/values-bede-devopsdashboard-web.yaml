@@ -12,3 +12,6 @@ service:
 
 ingress:
   hostname: some-host
+
+cache:
+  enabled: "false"
