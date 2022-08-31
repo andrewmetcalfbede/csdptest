@@ -19,8 +19,8 @@ spec:
         path: helm/apps
         helm:
           valueFiles:
-            - values.yaml
             - values-bede-devopsdashboard-{{name}}.yaml
+            - values.yaml
           values: |-
             ingress:
               host: some.host
