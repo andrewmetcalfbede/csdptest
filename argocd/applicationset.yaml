@@ -4,9 +4,11 @@ metadata:
   name: bede-devopsdashboard
 spec:
   generators:
-  - clusters: {} # This is a generator, specifically, a cluster generator.
+  - list:
+      elements:
+      - name: api
+      - name: web
   template: 
-    # This is a template Argo CD Application, but with support for parameter substitution.
     metadata:
       name: 'bede-devopsdashboard-{{name}}'
     spec:
@@ -26,5 +28,5 @@ spec:
               name: some_name
               host: some_host
       destination:
-        server: '{{server}}'
+        server: https://kubernetes.default.svc
         namespace: dashboard
