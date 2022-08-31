@@ -8,12 +8,6 @@ spec:
       elements:
       - name: api
       - name: web
-  - list:
-    elements:
-      - environment: dv03
-        db_host: some_host
-        db_name: some_name
-        ingress_host: some.host
   template: 
     metadata:
       name: 'bede-devopsdashboard-{{name}}'
@@ -29,10 +23,10 @@ spec:
             - values.yaml
           values: |-
             ingress:
-              host: {{ingress_host}}
+              host: some.host
             db:
-              name: {{db_name}}
-              host: {{db_host}}
+              name: some_name
+              host: some_host
       destination:
         server: https://kubernetes.default.svc
         namespace: dashboard
